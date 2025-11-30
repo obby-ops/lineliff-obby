@@ -7,173 +7,156 @@
   <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
-      --primary-color: #06C755;
-      --primary-hover: #05a84a;
-      --text-color: #333;
-      --light-gray: #f5f5f5;
-      --medium-gray: #e0e0e0;
-      --dark-gray: #757575;
-      --white: #ffffff;
-      --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-      --transition: all 0.3s ease;
-      --error-color: #e74c3c;
-      --success-color: #4CAF50;
+      --primary: #06C755;
+      --primary-dark: #05a84a;
+      --gray: #f5f5f5;
+      --text: #333;
+      --border: #e0e0e0;
+      --shadow: 0 4px 15px rgba(0,0,0,0.1);
     }
-
+    * { box-sizing: border-box; }
     body {
       font-family: 'Prompt', sans-serif;
-      background-color: var(--light-gray);
-      margin: 0;
-      padding: 0;
-      color: var(--text-color);
-      line-height: 1.6;
+      background: linear-gradient(135deg, #f0f8ff, #e6f7ee);
+      margin: 0; padding: 0; min-height: 100vh;
     }
-
     .container {
       max-width: 800px;
-      margin: 20px auto;
-      background-color: var(--white);
-      border-radius: 12px;
+      margin: 15px auto;
+      background: white;
+      border-radius: 16px;
       box-shadow: var(--shadow);
-      padding: 30px;
-      position: relative;
       overflow: hidden;
     }
-
     .header {
+      background: var(--primary);
+      color: white;
+      text-align: center;
+      padding: 25px 20px;
+    }
+    .header h1 { margin: 0; font-size: 24px; }
+    .header p { margin: 8px 0 0; opacity: 0.95; font-size: 15px; }
+
+    .content { padding: 30px; }
+
+    .profile-box {
       text-align: center;
       margin-bottom: 30px;
-      padding-top: 10px;
+      padding: 20px;
+      background: #f8fff9;
+      border-radius: 12px;
+      border: 2px solid #e6f7ee;
     }
-
-    .header h1 {
-      margin-bottom: 10px;
-      color: var(--primary-color);
-    }
-
-    .header p {
-      color: var(--dark-gray);
-    }
-
-    .header::after {
-      content: '';
-      display: block;
-      width: 100px;
-      height: 4px;
-      background: var(--primary-color);
-      margin: 20px auto;
-      border-radius: 2px;
-    }
-
     .profile-preview {
-      width: 90px;
-      height: 90px;
+      width: 90px; height: 90px;
       border-radius: 50%;
+      border: 4px solid var(--primary);
       object-fit: cover;
-      border: 4px solid var(--primary-color);
       box-shadow: 0 4px 12px rgba(6,199,85,0.3);
     }
+    .profile-name {
+      margin: 12px 0 4px;
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--primary);
+    }
 
-    .profile-section {
+    h2 {
       text-align: center;
-      margin-bottom: 30px;
+      color: var(--primary);
+      margin: 30px 0 20px;
+      font-size: 20px;
     }
 
     .info-row {
       display: flex;
-      margin-bottom: 18px;
-      align-items: center;
       flex-wrap: wrap;
+      margin-bottom: 18px;
+      gap: 10px;
     }
-
     .info-label {
       font-weight: 500;
+      color: var(--primary);
       width: 180px;
-      color: var(--primary-color);
+      padding-top: 12px;
       font-size: 15px;
     }
-
     .info-value {
       flex: 1;
-      min-width: 250px;
+      min-width: 280px;
     }
-
     input, textarea {
       width: 100%;
-      padding: 12px;
-      border: 1px solid var(--medium-gray);
-      border-radius: 8px;
+      padding: 13px;
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
       font-family: 'Prompt', sans-serif;
-      font-size: 15px;
-      transition: var(--transition);
+      font-size: 16px;
+      transition: all 0.3s;
     }
-
     input:focus, textarea:focus {
       outline: none;
-      border-color: var(--primary-color);
-      box-shadow: 0 0 0 3px rgba(6, 199, 85, 0.15);
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(6,199,85,0.15);
+    }
+    small {
+      color: #666;
+      font-size: 13px;
+      display: block;
+      margin-top: 5px;
     }
 
     button {
-      background-color: var(--primary-color);
+      display: block;
+      width: 100%;
+      max-width: 400px;
+      margin: 40px auto;
+      padding: 16px;
+      background: var(--primary);
       color: white;
       border: none;
-      padding: 14px 40px;
-      border-radius: 8px;
-      font-size: 17px;
+      border-radius: 12px;
+      font-size: 18px;
       font-weight: 600;
       cursor: pointer;
-      transition: var(--transition);
-      font-family: 'Prompt', sans-serif;
+      transition: 0.3s;
     }
-
-    button:hover {
-      background-color: var(--primary-hover);
-      transform: translateY(-2px);
-    }
-
+    button:hover { background: var(--primary-dark); transform: translateY(-2px); }
     button:disabled {
-      background-color: var(--medium-gray);
+      background: #aaa;
       cursor: not-allowed;
       transform: none;
     }
 
     .loading {
       text-align: center;
-      padding: 60px 20px;
-      color: var(--dark-gray);
+      padding: 80px 20px;
+      color: #666;
     }
-
-    .loading-spinner {
+    .spinner {
+      width: 50px; height: 50px;
       border: 5px solid #f0f0f0;
-      border-top: 5px solid var(--primary-color);
+      border-top: 5px solid var(--primary);
       border-radius: 50%;
-      width: 50px;
-      height: 50px;
       animation: spin 1s linear infinite;
       margin: 0 auto 20px;
     }
-
-    @keyframes spin {
-      to { transform: rotate(360deg); }
-    }
+    @keyframes spin { to { transform: rotate(360deg); } }
 
     .footer {
       text-align: center;
-      margin-top: 40px;
-      color: var(--dark-gray);
-      font-size: 14px;
       padding: 20px;
       background: #f9f9f9;
-      border-radius: 0 0 12px 12px;
-      margin: 40px -30px -30px;
+      color: #888;
+      font-size: 14px;
+      border-top: 1px solid #eee;
     }
 
     @media (max-width: 768px) {
-      .container { margin: 10px; padding: 20px; }
-      .info-row { flex-direction: column; align-items: stretch; }
-      .info-label { width: 100%; margin-bottom: 8px; font-size: 14px; }
+      .info-row { flex-direction: column; }
+      .info-label { width: 100%; padding-top: 0; margin-bottom: 5px; }
       .info-value { min-width: auto; }
+      .content { padding: 20px; }
     }
   </style>
 </head>
@@ -182,31 +165,32 @@
   <div class="container">
     <div class="header">
       <h1>ลงทะเบียนผู้ปกครอง</h1>
-      <p>กรุณากรอกข้อมูลนักเรียนและผู้ปกครองให้ครบถ้วน</p>
+      <p>กรอกข้อมูลนักเรียนและผู้ปกครองให้ครบถ้วน</p>
     </div>
 
     <div id="loading" class="loading">
-      <div class="loading-spinner"></div>
+      <div class="spinner"></div>
       <p>กำลังเชื่อมต่อกับ LINE... กรุณารอสักครู่</p>
     </div>
 
-    <div id="profile" style="display: none;">
-      <div class="profile-section">
-        <img id="profile-preview" class="profile-preview" src="" alt="รูปโปรไฟล์ LINE">
-        <h3 style="margin: 15px 0 5px; color: var(--primary-color);" id="display-name"></h3>
-        <p style="color: var(--dark-gray); margin: 0;">LINE Account</p>
+    <div id="profile" class="content" style="display:none;">
+
+      <div class="profile-box">
+        <img id="profile-preview" class="profile-preview" src="" alt="รูปโปรไฟล์">
+        <div class="profile-name" id="display-name"></div>
+        <div style="color:#666; font-size:14px;">บัญชี LINE</div>
       </div>
 
-      <h2 style="text-align: center; color: var(--primary-color); margin: 30px 0 20px;">ข้อมูลผู้ปกครองและนักเรียน</h2>
+      <h2>ข้อมูลผู้ปกครองและนักเรียน</h2>
 
-      <form id="additional-form">
+      <form id="reg-form">
 
-        <!-- ผู้ปกครอง -->
         <div class="info-row">
           <div class="info-label">ชื่อผู้ปกครอง</div>
           <div class="info-value">
             <input type="text" id="parent-firstname" placeholder="เช่น สมชาย" required>
           </div>
+        </div>
         </div>
 
         <div class="info-row">
@@ -219,11 +203,18 @@
         <div class="info-row">
           <div class="info-label">เบอร์โทรผู้ปกครอง</div>
           <div class="info-value">
-            <input type="tel" id="parent-phone" placeholder="08x-xxx-xxxx" pattern="[0-9]{10}" required>
+            <input 
+              type="tel" 
+              id="parent-phone" 
+              placeholder="0901234567" 
+              maxlength="10"
+              inputmode="numeric"
+              oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0,10)"
+              required>
+            <small>กรอกเฉพาะตัวเลข 10 หลัก เช่น 0901234567</small>
           </div>
         </div>
 
-        <!-- นักเรียน -->
         <div class="info-row">
           <div class="info-label">รหัสนักเรียน</div>
           <div class="info-value">
@@ -248,30 +239,27 @@
         <div class="info-row">
           <div class="info-label">หมายเหตุ (ถ้ามี)</div>
           <div class="info-value">
-            <textarea id="comments" rows="3" placeholder="เช่น แพ้อาหารทะเล, รับยาตอนเช้า ฯลฯ"></textarea>
+            <textarea id="comments" rows="3" placeholder="เช่น แพ้อาหารทะเล, รับยาตอนเช้า"></textarea>
           </div>
         </div>
 
-        <div style="text-align: center; margin: 40px 0;">
-          <button type="submit">ส่งข้อมูลลงทะเบียน</button>
-        </div>
+        <button type="submit" id="submit-btn">ส่งข้อมูลลงทะเบียน</button>
       </form>
-    </div>
 
-    <div class="footer">
-      <p>ระบบลงทะเบียนผ่าน LINE LIFF • ข้อมูลจะถูกบันทึกอย่างปลอดภัยใน Google Sheets</p>
+      <div class="footer">
+        ระบบลงทะเบียนผ่าน LINE LIFF • ข้อมูลปลอดภัย 100%
+      </div>
     </div>
   </div>
 
-  <!-- LINE LIFF SDK -->
   <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
   <script>
-    // แก้ LIFF ID และ Google Script URL ของคุณตรงนี้
-    const liffId = "2008591672-K2BMd1vV"; // เปลี่ยนเป็น LIFF ID ของคุณ
-    const googleScriptUrl = "https://script.google.com/macros/s/AKfycbz6kr_ohGST7adznY6VctkeZdQtl8mjrn5unFb3DJBI6GgcXspS08B3iJB2CkEpk7ZihA/exec"; // เปลี่ยนเป็น Web App URL ของคุณ
+    // เปลี่ยนตรงนี้ 2 จุดเท่านั้น!
+    const LIFF_ID = "2008591672-K2BMd1vV";  // เปลี่ยนเป็น LIFF ID ของคุณ
+    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbz6kr_ohGST7adznY6VctkeZdQtl8mjrn5unFb3DJBI6GgcXspS08B3iJB2CkEpk7ZihA/exec"; // เปลี่ยนเป็น URL Web App ของคุณ
 
     document.addEventListener('DOMContentLoaded', () => {
-      liff.init({ liffId: liffId })
+      liff.init({ liffId: LIFF_ID })
         .then(() => {
           if (!liff.isLoggedIn()) {
             liff.login({ redirectUri: window.location.href });
@@ -283,16 +271,21 @@
           document.getElementById('loading').style.display = 'none';
           document.getElementById('profile').style.display = 'block';
 
-          // แสดงข้อมูล LINE
           document.getElementById('display-name').textContent = profile.displayName;
-          const pictureUrl = profile.pictureUrl || 'https://via.placeholder.com/150/06C755/white?text=LINE';
-          document.getElementById('profile-preview').src = pictureUrl;
+          const pic = profile.pictureUrl || 'https://via.placeholder.com/90/06C755/white?text=LINE';
+          document.getElementById('profile-preview').src = pic;
 
-          // ส่งฟอร์ม
-          document.getElementById('additional-form').onsubmit = function(e) {
+          // ส่งข้อมูล
+          document.getElementById('reg-form').onsubmit = function(e) {
             e.preventDefault();
 
-            const btn = this.querySelector('button');
+            const phone = document.getElementById('parent-phone').value;
+            if (phone.length !== 10) {
+              alert('กรุณากรอกเบอร์โทรศัพท์ให้ครบ 10 หลัก');
+              return;
+            }
+
+            const btn = document.getElementById('submit-btn');
             btn.disabled = true;
             btn.textContent = 'กำลังส่งข้อมูล...';
 
@@ -302,42 +295,41 @@
               displayName: profile.displayName,
               pictureUrl: profile.pictureUrl || '',
               statusMessage: profile.statusMessage || '',
-
               parentFirstName: document.getElementById('parent-firstname').value.trim(),
               parentLastName: document.getElementById('parent-lastname').value.trim(),
-              parentPhone: document.getElementById('parent-phone').value.trim(),
+              parentPhone: phone, // ส่งแค่ตัวเลข 10 หลัก
               studentId: document.getElementById('student-id').value.trim(),
               studentFirstName: document.getElementById('student-firstname').value.trim(),
               studentLastName: document.getElementById('student-lastname').value.trim(),
               comments: document.getElementById('comments').value.trim()
             };
 
-            fetch(googleScriptUrl, {
+            fetch(WEB_APP_URL, {
               method: 'POST',
               mode: 'no-cors',
-              cache: 'no-cache',
               body: JSON.stringify(data)
             })
             .then(() => {
               btn.textContent = 'ส่งสำเร็จ!';
-              btn.style.backgroundColor = '#4CAF50';
-              setTimeout(() => liff.closeWindow(), 2000);
+              btn.style.background = '#4CAF50';
+              setTimeout(() => liff.closeWindow(), 1500);
             })
             .catch(() => {
               btn.textContent = 'ส่งไม่สำเร็จ ลองใหม่';
-              btn.style.backgroundColor = '#e74c3c';
+              btn.style.background = '#e74c3c';
               setTimeout(() => {
                 btn.textContent = 'ส่งข้อมูลลงทะเบียน';
-                btn.style.backgroundColor = '#06C755';
+                btn.style.background = '#06C755';
                 btn.disabled = false;
               }, 3000);
             });
           };
+
         })
         .catch(err => {
           document.getElementById('loading').innerHTML = `
-            <p style="color:#e74c3c;">เกิดข้อผิดพลาด: ${err.message || 'ไม่สามารถเชื่อมต่อ LINE'}</p>
-            <button onclick="location.reload()" style="background:#e74c3c;color:white;padding:10px 20px;border:none;border-radius:8px;margin-top:15px;">ลองใหม่</button>
+            <p style="color:#e74c3c;">ไม่สามารถเชื่อมต่อ LINE ได้</p>
+            <button onclick="location.reload()" style="background:#e74c3c;color:white;padding:12px 24px;border:none;border-radius:10px;">ลองใหม่</button>
           `;
         });
     });
