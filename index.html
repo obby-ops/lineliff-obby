@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ลงทะเบียนผู้ปกครอง - นักเรียน</title>
+  <title>ลงทะเบียนผู้ปกครอง</title>
   <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
     :root { --primary: #06C755; --primary-dark: #05a84a; }
@@ -35,18 +35,14 @@
     .spinner { width: 60px; height: 60px; border: 6px solid #f0f0f0; border-top: 6px solid var(--primary); border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 25px; }
     @keyframes spin { to { transform: rotate(360deg); } }
     .footer { text-align: center; padding: 25px; background: #f0fdf4; color: #2c8a4e; font-size: 14.5px; border-top: 1px solid #d0e8d8; }
-    @media (max-width: 600px) {
-      .form-group { flex-direction: column; align-items: stretch; gap: 8px; }
-      .form-label { width: 100%; }
-      .content { padding: 25px 20px; }
-    }
+    @media (max-width: 600px) { .form-group { flex-direction: column; align-items: stretch; gap: 8px; } .form-label { width: 100%; } .content { padding: 25px 20px; } }
   </style>
 </head>
 <body>
   <div class="container">
     <div class="header">
       <h1>ลงทะเบียนผู้ปกครอง</h1>
-      <p>กรอกรหัสหรือชื่อนักเรียน → ระบบเติมให้อัตโนมัติ</p>
+      <p>พิมพ์รหัสหรือชื่อนักเรียน → ระบบเติมให้อัตโนมัติ</p>
     </div>
 
     <div id="loading" class="loading">
@@ -82,16 +78,15 @@
           <div class="form-label">เบอร์โทรผู้ปกครอง</div>
           <div class="form-input">
             <input type="tel" id="parent-phone" placeholder="0901234567" maxlength="10"
-                   oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0,10)" required>
+                   oninput="this.value=this.value.replace(/[^0-9]/g,'').slice(0,10)" required>
             <small>กรอกเฉพาะตัวเลข 10 หลัก</small>
           </div>
         </div>
 
-        <!-- ค้นหานักเรียน -->
         <div class="form-group">
           <div class="form-label">รหัสหรือชื่อนักเรียน</div>
           <div class="form-input">
-            <input type="text" id="student-search" placeholder="พิมพ์รหัสหรือชื่อนักเรียน (บางส่วนก็ได้)" required autocomplete="off">
+            <input type="text" id="student-search" placeholder="พิมพ์รหัสหรือชื่อนักเรียน" required autocomplete="off">
             <div id="search-results"></div>
           </div>
         </div>
@@ -110,8 +105,6 @@
           </div>
         </div>
 
-        <!-- ลบช่องนามสกุลนักเรียนออกแล้ว -->
-
         <div class="form-group">
           <div class="form-label">ระดับชั้น</div>
           <div class="form-input">
@@ -122,7 +115,7 @@
         <div class="form-group">
           <div class="form-label">หมายเหตุ</div>
           <div class="form-input">
-            <textarea id="comments" rows="3" placeholder="เช่น แพ้อาหารทะเล, รับยาตอนเช้า..."></textarea>
+            <textarea id="comments" rows="3" placeholder="เช่น แพ้อาหารทะเล..."></textarea>
           </div>
         </div>
 
@@ -130,7 +123,7 @@
       </form>
 
       <div class="footer">
-        ระบบลงทะเบียนผ่าน LINE LIFF • ดึงข้อมูลนักเรียนอัตโนมัติจาก Google Sheets
+        ระบบลงทะเบียนผ่าน LINE LIFF • อัตโนมัติ 100%
       </div>
     </div>
   </div>
@@ -178,21 +171,25 @@
             .then(r => r.json())
             .then(data => {
               resultsDiv.innerHTML = '';
-              if (data.length === 0) {
+              if (!data || data.length === 0) {
                 resultsDiv.innerHTML = '<div class="result-item" style="color:#e74c3c;padding:15px;text-align:center;">ไม่พบนักเรียน</div>';
               } else {
                 data.forEach(student => {
                   const div = document.createElement('div');
                   div.className = 'result-item';
-                  div.innerHTML = `<strong>${student.studentId}</strong> - ${student.firstName} ${student.lastName} <small>(${student.grade})</small>`;
+                  div.innerHTML = `<strong>${student.studentId}</strong> - ${student.firstName} ${student.lastName} <small style="color:#27ae60;">(${student.grade})</small>`;
                   div.onclick = () => {
                     fillStudentInfo(student);
                     resultsDiv.style.display = 'none';
-                    input.value = student.studentId + ' - ' + student.firstName + ' ' + student.lastName;
+                    input.value = `${student.studentId} - ${student.firstName} ${student.lastName}`;
                   };
                   resultsDiv.appendChild(div);
                 });
               }
+              resultsDiv.style.display = 'block';
+            })
+            .catch(() => {
+              resultsDiv.innerHTML = '<div class="result-item" style="color:#e74c3c;">เกิดข้อผิดพลาด</div>';
               resultsDiv.style.display = 'block';
             });
         }, 400);
@@ -207,10 +204,8 @@
 
     function fillStudentInfo(student) {
       document.getElementById('student-id').value = student.studentId;
-      document.getElementById('student-firstname').value = student.firstName + ' ' + student.lastName; // แสดงชื่อเต็ม
-      document.getElementById('grade').value = student.grade;
-      // ยังเก็บนามสกุลแยกไว้ใน hidden field หรือส่งไปเงียบๆ ก็ได้
-      // แต่ในกรณีนี้เราไม่แสดง แต่ยังส่งไปบันทึกในชีตได้ปกติ
+      document.getElementById('student-firstname').value = student.firstName + ' ' + student.lastName;
+      document.getElementById('grade').value = student.grade; // แสดงระดับชั้นทันที!
     }
 
     function clearStudentInfo() {
@@ -222,18 +217,25 @@
     function setupFormSubmit() {
       document.getElementById('reg-form').onsubmit = function(e) {
         e.preventDefault();
-        const phone = document.getElementById('parent-phone').value;
-        if (phone.length !== 10) return alert('กรุณากรอกเบอร์โทรศัพท์ให้ครบ 10 หลัก');
-        const studentId = document.getElementById('student-id').value;
-        if (!studentId) return alert('กรุณาค้นหาและเลือกรายชื่อนักเรียน');
 
-        const fullName = document.getElementById('student-firstname').value.trim();
-        const [firstName, ...lastNameParts] = fullName.split(' ');
-        const lastName = lastNameParts.join(' ');
+        if (document.getElementById('parent-phone').value.length !== 10) {
+          return alert('กรุณากรอกเบอร์โทรศัพท์ให้ครบ 10 หลัก');
+        }
+        if (!document.getElementById('student-id').value) {
+          return alert('กรุณาเลือกรายชื่อนักเรียน');
+        }
+        if (!document.getElementById('grade').value) {
+          return alert('ไม่พบระดับชั้นของนักเรียนคนนี้');
+        }
 
         const btn = document.getElementById('submit-btn');
         btn.disabled = true;
         btn.textContent = 'กำลังส่งข้อมูล...';
+
+        const fullName = document.getElementById('student-firstname').value.trim();
+        const nameParts = fullName.split(' ');
+        const firstName = nameParts[0];
+        const lastName = nameParts.slice(1).join(' ') || '';
 
         const data = {
           timestamp: new Date().toISOString(),
@@ -243,8 +245,8 @@
           statusMessage: profileData.statusMessage || '',
           parentFirstName: document.getElementById('parent-firstname').value.trim(),
           parentLastName: document.getElementById('parent-lastname').value.trim(),
-          parentPhone: phone,
-          studentId: studentId,
+          parentPhone: document.getElementById('parent-phone').value,
+          studentId: document.getElementById('student-id').value,
           studentFirstName: firstName,
           studentLastName: lastName,
           grade: document.getElementById('grade').value,
