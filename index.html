@@ -6,181 +6,46 @@
   <title>ลงทะเบียนผู้ปกครอง - นักเรียน</title>
   <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
-    :root {
-      --primary: #06C755;
-      --primary-dark: #05a84a;
-      --bg: #f8fffb;
-      --text: #2c3e50;
-      --border: #d0e8d8;
-      --shadow: 0 8px 25px rgba(6, 199, 85, 0.15);
-    }
+    :root { --primary: #06C755; --primary-dark: #05a84a; }
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      font-family: 'Prompt', sans-serif;
-      background: linear-gradient(135deg, #e8f5e9, #f1f8e9);
-      color: var(--text);
-      min-height: 100vh;
-      padding: 10px;
-    }
-    .container {
-      max-width: 700px;
-      margin: 20px auto;
-      background: white;
-      border-radius: 20px;
-      overflow: hidden;
-      box-shadow: var(--shadow);
-    }
-    .header {
-      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-      color: white;
-      text-align: center;
-      padding: 30px 20px;
-    }
+    body { font-family: 'Prompt', sans-serif; background: linear-gradient(135deg, #e8f5e9, #f1f8e9); color: #2c3e50; min-height: 100vh; padding: 10px; }
+    .container { max-width: 700px; margin: 20px auto; background: white; border-radius: 20px; overflow: hidden; box-shadow: 0 8px 25px rgba(6,199,85,0.15); }
+    .header { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: white; text-align: center; padding: 30px 20px; }
     .header h1 { font-size: 26px; margin: 0; }
-    .header p { margin-top: 8px; font-size: 16px; opacity: 0.95; }
-
     .content { padding: 35px 40px; }
+    .profile-box { text-align: center; background: #f0fdf4; padding: 20px; border-radius: 16px; border: 2px dashed #86efac; margin-bottom: 30px; }
+    .profile-preview { width: 100px; height: 100px; border-radius: 50%; border: 5px solid white; box-shadow: 0 6px 20px rgba(6,199,85,0.3); object-fit: cover; }
+    .profile-name { margin: 15px 0 5px; font-size: 20px; font-weight: 600; color: var(--primary); }
+    h2 { text-align: center; color: var(--primary); margin: 35px 0 25px; font-size: 22px; position: relative; }
+    h2::after { content: ''; width: 80px; height: 4px; background: var(--primary); display: block; margin: 12px auto 0; border-radius: 2px; }
 
-    .profile-box {
-      text-align: center;
-      background: #f0fdf4;
-      padding: 20px;
-      border-radius: 16px;
-      border: 2px dashed #86efac;
-      margin-bottom: 30px;
-    }
-    .profile-preview {
-      width: 100px;
-      height: 100px;
-      border-radius: 50%;
-      border: 5px solid white;
-      box-shadow: 0 6px 20px rgba(6,199,85,0.3);
-      object-fit: cover;
-    }
-    .profile-name {
-      margin: 15px 0 5px;
-      font-size: 20px;
-      font-weight: 600;
-      color: var(--primary);
-    }
+    .form-group { display: flex; align-items: center; margin-bottom: 22px; flex-wrap: wrap; gap: 15px; }
+    .form-label { font-weight: 600; color: var(--primary); width: 170px; font-size: 16px; flex-shrink: 0; }
+    .form-input { flex: 1; min-width: 280px; }
+    input, select, textarea { width: 100%; padding: 14px 16px; border: 2px solid #cce7d6; border-radius: 12px; font-family: 'Prompt', sans-serif; font-size: 16px; background: #f8fffb; transition: all 0.3s; }
+    input:focus, textarea:focus { outline: none; border-color: var(--primary); background: white; box-shadow: 0 0 0 4px rgba(6,199,85,0.15); }
+    .readonly { background: #e8f5e9 !important; color: #06C755; font-weight: 600; }
+    small { color: #e74c3c; font-size: 13.5px; margin-top: 6px; display: block; }
 
-    h2 {
-      text-align: center;
-      color: var(--primary);
-      margin: 35px 0 25px;
-      font-size: 22px;
-      position: relative;
-    }
-    h2::after {
-      content: '';
-      width: 80px;
-      height: 4px;
-      background: var(--primary);
-      display: block;
-      margin: 12px auto 0;
-      border-radius: 2px;
-    }
+    #search-results { margin-top: 8px; max-height: 180px; overflow-y: auto; border: 1px solid #cce7d6; border-radius: 8px; background: white; display: none; }
+    .result-item { padding: 12px 16px; cursor: pointer; border-bottom: 1px solid #eee; }
+    .result-item:hover { background: #f0fdf4; }
+    .result-item:last-child { border-bottom: none; }
 
-    /* ทำให้ชื่อและช่องกรอกอยู่ในแนวเดียวกันสวยงาม */
-    .form-group {
-      display: flex;
-      align-items: center;
-      margin-bottom: 22px;
-      flex-wrap: wrap;
-      gap: 15px;
-    }
-    .form-label {
-      font-weight: 600;
-      color: var(--primary);
-      width: 170px;
-      font-size: 16px;
-      flex-shrink: 0;
-    }
-    .form-input {
-      flex: 1;
-      min-width: 280px;
-    }
-    input, textarea {
-      width: 100%;
-      padding: 14px 16px;
-      border: 2px solid #cce7d6;
-      border-radius: 12px;
-      font-family: 'Prompt', sans-serif;
-      font-size: 16px;
-      transition: all 0.3s;
-      background: #f8fffb;
-    }
-    input:focus, textarea:focus {
-      outline: none;
-      border-color: var(--primary);
-      background: white;
-      box-shadow: 0 0 0 4px rgba(6, 199, 85, 0.15);
-    }
-    textarea {
-      min-height: 100px;
-      resize: vertical;
-    }
-    small {
-      color: #e74c3c;
-      font-size: 13.5px;
-      margin-top: 6px;
-      display: block;
-    }
+    button { display: block; width: 100%; max-width: 500px; margin: 40px auto 20px; padding: 18px; background: linear-gradient(to right, var(--primary), var(--primary-dark)); color: white; border: none; border-radius: 16px; font-size: 19px; font-weight: 600; cursor: pointer; box-shadow: 0 6px 20px rgba(6,199,85,0.3); transition: all 0.3s; }
+    button:hover { transform: translateY(-3px); }
+    button:disabled { background: #95a5a6; cursor: not-allowed; transform: none; }
 
-    button {
-      display: block;
-      width: 100%;
-      max-width: 500px;
-      margin: 40px auto 20px;
-      padding: 18px;
-      background: linear-gradient(to right, var(--primary), var(--primary-dark));
-      color: white;
-      border: none;
-      border-radius: 16px;
-      font-size: 19px;
-      font-weight: 600;
-      cursor: pointer;
-      box-shadow: 0 6px 20px rgba(6,199,85,0.3);
-      transition: all 0.3s;
-    }
-    button:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 10px 25px rgba(6,199,85,0.4);
-    }
-    button:disabled {
-      background: #95a5a6;
-      transform: none;
-      cursor: not-allowed;
-    }
-
-    .loading {
-      text-align: center;
-      padding: 100px 20px;
-    }
-    .spinner {
-      width: 60px; height: 60px;
-      border: 6px solid #f0f0f0;
-      border-top: 6px solid var(--primary);
-      border-radius: 50%;
-      animation: spin 1s linear infinite;
-      margin: 0 auto 25px;
-    }
+    .loading { text-align: center; padding: 100px 20px; }
+    .spinner { width: 60px; height: 60px; border: 6px solid #f0f0f0; border-top: 6px solid var(--primary); border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 25px; }
     @keyframes spin { to { transform: rotate(360deg); } }
 
-    .footer {
-      text-align: center;
-      padding: 25px;
-      background: #f0fdf4;
-      color: #2c8a4e;
-      font-size: 14.5px;
-      border-top: 1px solid #d0e8d8;
-    }
+    .footer { text-align: center; padding: 25px; background: #f0fdf4; color: #2c8a4e; font-size: 14.5px; border-top: 1px solid #d0e8d8; }
 
     @media (max-width: 600px) {
       .form-group { flex-direction: column; align-items: stretch; gap: 8px; }
-      .form-label { width: 100%; font-size: 15.5px; }
+      .form-label { width: 100%; }
       .content { padding: 25px 20px; }
-      .profile-preview { width: 80px; height: 80px; }
     }
   </style>
 </head>
@@ -189,7 +54,7 @@
   <div class="container">
     <div class="header">
       <h1>ลงทะเบียนผู้ปกครอง</h1>
-      <p>กรอกข้อมูลนักเรียนและผู้ปกครองให้ครบถ้วน</p>
+      <p>กรอกรหัสหรือชื่อนักเรียน → ระบบเติมให้อัตโนมัติ</p>
     </div>
 
     <div id="loading" class="loading">
@@ -225,43 +90,53 @@
         <div class="form-group">
           <div class="form-label">เบอร์โทรผู้ปกครอง</div>
           <div class="form-input">
-            <input
-              type="tel"
-              id="parent-phone"
-              placeholder="0901234567"
-              maxlength="10"
-              inputmode="numeric"
-              oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0,10)"
-              required>
-            <small>กรอกเฉพาะตัวเลข 10 หลัก เช่น 0901234567</small>
+            <input type="tel" id="parent-phone" placeholder="0901234567" maxlength="10"
+                   oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0,10)" required>
+            <small>กรอกเฉพาะตัวเลข 10 หลัก</small>
+          </div>
+        </div>
+
+        <!-- ค้นหานักเรียน -->
+        <div class="form-group">
+          <div class="form-label">รหัสหรือชื่อนักเรียน</div>
+          <div class="form-input">
+            <input type="text" id="student-search" placeholder="พิมพ์รหัสหรือชื่อนักเรียน (บางส่วนก็ได้)" required autocomplete="off">
+            <div id="search-results"></div>
           </div>
         </div>
 
         <div class="form-group">
           <div class="form-label">รหัสนักเรียน</div>
           <div class="form-input">
-            <input type="text" id="student-id" placeholder="เช่น 650001" required>
+            <input type="text" id="student-id" class="readonly" readonly>
           </div>
         </div>
 
         <div class="form-group">
           <div class="form-label">ชื่อนักเรียน</div>
           <div class="form-input">
-            <input type="text" id="student-firstname" placeholder="ชื่อจริงของนักเรียน" required>
+            <input type="text" id="student-firstname" class="readonly" readonly>
           </div>
         </div>
 
         <div class="form-group">
           <div class="form-label">นามสกุลนักเรียน</div>
           <div class="form-input">
-            <input type="text" id="student-lastname" placeholder="นามสกุลนักเรียน" required>
+            <input type="text" id="student-lastname" class="readonly" readonly>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="form-label">ระดับชั้น</div>
+          <div class="form-input">
+            <input type="text" id="grade" class="readonly" readonly>
           </div>
         </div>
 
         <div class="form-group">
           <div class="form-label">หมายเหตุ</div>
           <div class="form-input">
-            <textarea id="comments" rows="3" placeholder="เช่น แพ้อาหารทะเล, รับยาตอนเช้า, ขออนุญาตกลับบ้านเอง ฯลฯ"></textarea>
+            <textarea id="comments" rows="3" placeholder="เช่น แพ้อาหารทะเล, รับยาตอนเช้า..."></textarea>
           </div>
         </div>
 
@@ -269,90 +144,147 @@
       </form>
 
       <div class="footer">
-        ระบบลงทะเบียนผ่าน LINE LIFF • ข้อมูลถูกบันทึกอย่างปลอดภัยใน Google Sheets
+        ระบบลงทะเบียนผ่าน LINE LIFF • ดึงข้อมูลนักเรียนอัตโนมัติจาก Google Sheets
       </div>
     </div>
   </div>
 
   <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
   <script>
-    // เปลี่ยนแค่ 2 บรรทัดนี้เท่านั้น!
-    const LIFF_ID = "2008591672-K2BMd1vV";     // เปลี่ยนเป็น LIFF ID ของคุณ
-    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbz6kr_ohGST7adznY6VctkeZdQtl8mjrn5unFb3DJBI6GgcXspS08B3iJB2CkEpk7ZihA/exec"; // เปลี่ยนเป็น Web App URL ของคุณ
+    const LIFF_ID = "2008591672-K2BMd1vV";     // แก้เป็น LIFF ID ของคุณ
+    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbz6kr_ohGST7adznY6VctkeZdQtl8mjrn5unFb3DJBI6GgcXspS08B3iJB2CkEpk7ZihA/exec"; // แก้เป็น URL ของคุณ
+
+    let profileData = null;
+    let timeout = null;
 
     document.addEventListener('DOMContentLoaded', () => {
       liff.init({ liffId: LIFF_ID })
         .then(() => {
-          if (!liff.isLoggedIn()) {
-            liff.login({ redirectUri: window.location.href });
-          } else {
-            return liff.getProfile();
-          }
+          if (!liff.isLoggedIn()) liff.login({ redirectUri: window.location.href });
+          else return liff.getProfile();
         })
         .then(profile => {
+          profileData = profile;
           document.getElementById('loading').style.display = 'none';
           document.getElementById('profile').style.display = 'block';
-
           document.getElementById('display-name').textContent = profile.displayName;
-          const pic = profile.pictureUrl || 'https://via.placeholder.com/100/06C755/white?text=LINE';
-          document.getElementById('profile-preview').src = pic;
+          document.getElementById('profile-preview').src = profile.pictureUrl || 'https://via.placeholder.com/100/06C755/white?text=LINE';
 
-          document.getElementById('reg-form').onsubmit = function(e) {
-            e.preventDefault();
-
-            const phone = document.getElementById('parent-phone').value;
-            if (phone.length !== 10) {
-              alert('กรุณากรอกเบอร์โทรศัพท์ให้ครบ 10 หลัก');
-              return;
-            }
-
-            const btn = document.getElementById('submit-btn');
-            btn.disabled = true;
-            btn.textContent = 'กำลังส่งข้อมูล...';
-
-            const data = {
-              timestamp: new Date().toISOString(),
-              lineUserId: profile.userId,
-              displayName: profile.displayName,
-              pictureUrl: profile.pictureUrl || '',
-              statusMessage: profile.statusMessage || '',
-              parentFirstName: document.getElementById('parent-firstname').value.trim(),
-              parentLastName: document.getElementById('parent-lastname').value.trim(),
-              parentPhone: phone,
-              studentId: document.getElementById('student-id').value.trim(),
-              studentFirstName: document.getElementById('student-firstname').value.trim(),
-              studentLastName: document.getElementById('student-lastname').value.trim(),
-              comments: document.getElementById('comments').value.trim()
-            };
-
-            fetch(WEB_APP_URL, {
-              method: 'POST',
-              mode: 'no-cors',
-              body: JSON.stringify(data)
-            })
-            .then(() => {
-              btn.textContent = 'ส่งสำเร็จ!';
-              btn.style.background = 'linear-gradient(to right, #27ae60, #2ecc71)';
-              setTimeout(() => liff.closeWindow(), 1800);
-            })
-            .catch(() => {
-              btn.textContent = 'ส่งไม่สำเร็จ ลองใหม่';
-              btn.style.background = '#e74c3c';
-              setTimeout(() => {
-                btn.textContent = 'ส่งข้อมูลลงทะเบียน';
-                btn.style.background = 'linear-gradient(to right, var(--primary), var(--primary-dark))';
-                btn.disabled = false;
-              }, 3000);
-            });
-          };
+          setupSearch();
+          setupFormSubmit();
         })
         .catch(err => {
-          document.getElementById('loading').innerHTML = `
-            <p style="color:#e74c3c; font-size:18px;">ไม่สามารถเชื่อมต่อ LINE ได้</p>
-            <button onclick="location.reload()" style="background:var(--primary);color:white;padding:14px 30px;border:none;border-radius:12px;margin-top:20px;">ลองใหม่</button>
-          `;
+          document.getElementById('loading').innerHTML = `<p style="color:#e74c3c;">เชื่อมต่อ LINE ไม่สำเร็จ</p><button onclick="location.reload()" style="background:#06C755;color:white;padding:12px 24px;border:none;border-radius:12px;margin-top:15px;cursor:pointer;">ลองใหม่</button>`;
         });
     });
+
+    function setupSearch() {
+      const input = document.getElementById('student-search');
+      const resultsDiv = document.getElementById('search-results');
+
+      input.addEventListener('input', () => {
+        clearTimeout(timeout);
+        const q = input.value.trim();
+        if (q.length < 2) {
+          resultsDiv.style.display = 'none';
+          clearStudentInfo();
+          return;
+        }
+
+        timeout = setTimeout(() => {
+          fetch(`${WEB_APP_URL}?action=search&q=${encodeURIComponent(q)}`)
+            .then(r => r.json())
+            .then(data => {
+              resultsDiv.innerHTML = '';
+              if (data.length === 0) {
+                resultsDiv.innerHTML = '<div class="result-item" style="color:#e74c3c;padding:15px;text-align:center;">ไม่พบนักเรียน</div>';
+              } else {
+                data.forEach(student => {
+                  const div = document.createElement('div');
+                  div.className = 'result-item';
+                  div.innerHTML = `<strong>${student.studentId}</strong> - ${student.firstName} ${student.lastName} <small>(${student.grade})</small>`;
+                  div.onclick = () => {
+                    fillStudentInfo(student);
+                    resultsDiv.style.display = 'none';
+                    input.value = student.studentId + ' - ' + student.firstName + ' ' + student.lastName;
+                  };
+                  resultsDiv.appendChild(div);
+                });
+              }
+              resultsDiv.style.display = 'block';
+            });
+        }, 400);
+      });
+
+      // ปิดผลการค้นหาเมื่อคลิกนอก
+      document.addEventListener('click', (e) => {
+        if (!input.contains(e.target) && !resultsDiv.contains(e.target)) {
+          resultsDiv.style.display = 'none';
+        }
+      });
+    }
+
+    function fillStudentInfo(student) {
+      document.getElementById('student-id').value = student.studentId;
+      document.getElementById('student-firstname').value = student.firstName;
+      document.getElementById('student-lastname').value = student.lastName;
+      document.getElementById('grade').value = student.grade;
+    }
+
+    function clearStudentInfo() {
+      document.getElementById('student-id').value = '';
+      document.getElementById('student-firstname').value = '';
+      document.getElementById('student-lastname').value = '';
+      document.getElementById('grade').value = '';
+    }
+
+    function setupFormSubmit() {
+      document.getElementById('reg-form').onsubmit = function(e) {
+        e.preventDefault();
+
+        const phone = document.getElementById('parent-phone').value;
+        if (phone.length !== 10) return alert('กรุณากรอกเบอร์โทรศัพท์ให้ครบ 10 หลัก');
+
+        const studentId = document.getElementById('student-id').value;
+        if (!studentId) return alert('กรุณาค้นหาและเลือกรายชื่อนักเรียน');
+
+        const btn = document.getElementById('submit-btn');
+        btn.disabled = true;
+        btn.textContent = 'กำลังส่งข้อมูล...';
+
+        const data = {
+          timestamp: new Date().toISOString(),
+          lineUserId: profileData.userId,
+          displayName: profileData.displayName,
+          pictureUrl: profileData.pictureUrl || '',
+          statusMessage: profileData.statusMessage || '',
+          parentFirstName: document.getElementById('parent-firstname').value.trim(),
+          parentLastName: document.getElementById('parent-lastname').value.trim(),
+          parentPhone: phone,
+          studentId: studentId,
+          studentFirstName: document.getElementById('student-firstname').value,
+          studentLastName: document.getElementById('student-lastname').value,
+          grade: document.getElementById('grade').value,
+          comments: document.getElementById('comments').value.trim()
+        };
+
+        fetch(WEB_APP_URL, {
+          method: 'POST',
+          mode: 'no-cors',
+          body: JSON.stringify(data)
+        })
+        .then(() => {
+          btn.textContent = 'ส่งสำเร็จ!';
+          btn.style.background = 'linear-gradient(to right, #27ae60, #2ecc71)';
+          setTimeout(() => liff.closeWindow(), 1800);
+        })
+        .catch(() => {
+          alert('ส่งไม่สำเร็จ กรุณาลองใหม่');
+          btn.disabled = false;
+          btn.textContent = 'ส่งข้อมูลลงทะเบียน';
+        });
+      };
+    }
   </script>
 </body>
 </html>
