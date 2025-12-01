@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ลงทะเบียนผู้ปกครอง - นักเรียน</title>
+  <title>ลงทะเบียนผู้ปกครอง</title>
   <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
     :root { --primary: #06C755; --primary-dark: #05a84a; }
@@ -22,7 +22,7 @@
     .form-group { display: flex; align-items: center; margin-bottom: 22px; flex-wrap: wrap; gap: 15px; }
     .form-label { font-weight: 600; color: var(--primary); width: 170px; font-size: 16px; flex-shrink: 0; }
     .form-input { flex: 1; min-width: 280px; }
-    input, select, textarea { width: 100%; padding: 14px 16px; border: 2px solid #cce7d6; border-radius: 12px; font-family: 'Prompt', sans-serif; font-size: 16px; background: #f8fffb; transition: all 0.3s; }
+    input, textarea { width: 100%; padding: 14px 16px; border: 2px solid #cce7d6; border-radius: 12px; font-family: 'Prompt', sans-serif; font-size: 16px; background: #f8fffb; transition: all 0.3s; }
     input:focus, textarea:focus { outline: none; border-color: var(--primary); background: white; box-shadow: 0 0 0 4px rgba(6,199,85,0.15); }
     .readonly { background: #e8f5e9 !important; color: #06C755; font-weight: 600; }
     small { color: #e74c3c; font-size: 13.5px; margin-top: 6px; display: block; }
@@ -30,11 +30,10 @@
     #search-results { margin-top: 8px; max-height: 180px; overflow-y: auto; border: 1px solid #cce7d6; border-radius: 8px; background: white; display: none; }
     .result-item { padding: 12px 16px; cursor: pointer; border-bottom: 1px solid #eee; }
     .result-item:hover { background: #f0fdf4; }
-    .result-item:last-child { border-bottom: none; }
 
     button { display: block; width: 100%; max-width: 500px; margin: 40px auto 20px; padding: 18px; background: linear-gradient(to right, var(--primary), var(--primary-dark)); color: white; border: none; border-radius: 16px; font-size: 19px; font-weight: 600; cursor: pointer; box-shadow: 0 6px 20px rgba(6,199,85,0.3); transition: all 0.3s; }
     button:hover { transform: translateY(-3px); }
-    button:disabled { background: #95a5a6; cursor: not-allowed; transform: none; }
+    button:disabled { background: #95a5a6; cursor: not-allowed; }
 
     .loading { text-align: center; padding: 100px 20px; }
     .spinner { width: 60px; height: 60px; border: 6px solid #f0f0f0; border-top: 6px solid var(--primary); border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 25px; }
@@ -54,7 +53,7 @@
   <div class="container">
     <div class="header">
       <h1>ลงทะเบียนผู้ปกครอง</h1>
-      <p>กรอกรหัสหรือชื่อนักเรียน → ระบบเติมให้อัตโนมัติ</p>
+      <p>พิมพ์รหัสหรือชื่อนักเรียน → ระบบเติมให้อัตโนมัติ</p>
     </div>
 
     <div id="loading" class="loading">
@@ -100,7 +99,7 @@
         <div class="form-group">
           <div class="form-label">รหัสหรือชื่อนักเรียน</div>
           <div class="form-input">
-            <input type="text" id="student-search" placeholder="พิมพ์รหัสหรือชื่อนักเรียน (บางส่วนก็ได้)" required autocomplete="off">
+            <input type="text" id="student-search" placeholder="พิมพ์รหัสหรือชื่อนักเรียน" required autocomplete="off">
             <div id="search-results"></div>
           </div>
         </div>
@@ -115,14 +114,7 @@
         <div class="form-group">
           <div class="form-label">ชื่อนักเรียน</div>
           <div class="form-input">
-            <input type="text" id="student-firstname" class="readonly" readonly>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <div class="form-label">นามสกุลนักเรียน</div>
-          <div class="form-input">
-            <input type="text" id="student-lastname" class="readonly" readonly>
+            <input type="text" id="student-name" class="readonly" readonly>
           </div>
         </div>
 
@@ -144,7 +136,7 @@
       </form>
 
       <div class="footer">
-        ระบบลงทะเบียนผ่าน LINE LIFF • ดึงข้อมูลนักเรียนอัตโนมัติจาก Google Sheets
+        ระบบลงทะเบียนผ่าน LINE LIFF • ดึงข้อมูลนักเรียนอัตโนมัติ
       </div>
     </div>
   </div>
@@ -172,9 +164,6 @@
 
           setupSearch();
           setupFormSubmit();
-        })
-        .catch(err => {
-          document.getElementById('loading').innerHTML = `<p style="color:#e74c3c;">เชื่อมต่อ LINE ไม่สำเร็จ</p><button onclick="location.reload()" style="background:#06C755;color:white;padding:12px 24px;border:none;border-radius:12px;margin-top:15px;cursor:pointer;">ลองใหม่</button>`;
         });
     });
 
@@ -202,11 +191,11 @@
                 data.forEach(student => {
                   const div = document.createElement('div');
                   div.className = 'result-item';
-                  div.innerHTML = `<strong>${student.studentId}</strong> - ${student.firstName} ${student.lastName} <small>(${student.grade})</small>`;
+                  div.innerHTML = `<strong>${student.studentId}</strong> - ${student.name} <small>(${student.grade})</small>`;
                   div.onclick = () => {
                     fillStudentInfo(student);
                     resultsDiv.style.display = 'none';
-                    input.value = student.studentId + ' - ' + student.firstName + ' ' + student.lastName;
+                    input.value = student.studentId + ' - ' + student.name;
                   };
                   resultsDiv.appendChild(div);
                 });
@@ -216,7 +205,6 @@
         }, 400);
       });
 
-      // ปิดผลการค้นหาเมื่อคลิกนอก
       document.addEventListener('click', (e) => {
         if (!input.contains(e.target) && !resultsDiv.contains(e.target)) {
           resultsDiv.style.display = 'none';
@@ -226,15 +214,13 @@
 
     function fillStudentInfo(student) {
       document.getElementById('student-id').value = student.studentId;
-      document.getElementById('student-firstname').value = student.firstName;
-      document.getElementById('student-lastname').value = student.lastName;
+      document.getElementById('student-name').value = student.name;
       document.getElementById('grade').value = student.grade;
     }
 
     function clearStudentInfo() {
       document.getElementById('student-id').value = '';
-      document.getElementById('student-firstname').value = '';
-      document.getElementById('student-lastname').value = '';
+      document.getElementById('student-name').value = '';
       document.getElementById('grade').value = '';
     }
 
@@ -262,8 +248,7 @@
           parentLastName: document.getElementById('parent-lastname').value.trim(),
           parentPhone: phone,
           studentId: studentId,
-          studentFirstName: document.getElementById('student-firstname').value,
-          studentLastName: document.getElementById('student-lastname').value,
+          studentName: document.getElementById('student-name').value,   // ชื่อเต็ม
           grade: document.getElementById('grade').value,
           comments: document.getElementById('comments').value.trim()
         };
